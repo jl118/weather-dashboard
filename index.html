@@ -1,43 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- TODO: add bootstrap and fonts-->
-    <!-- CSS -->
-    <link rel="stylesheet" href="./assets/css/style.css">
-    <title>WTForecast</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- TODO: add bootstrap and fonts-->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+        <!-- CSS -->
+        <link rel="stylesheet" href="./assets/css/style.css" />
+        <title>WTForecast</title>
+    </head>
+
     <body>
         <!-- page header -->
-        <header>
-            <h1>What the F-orecast?!?</h1>
+        <header class="bg-dark text-light p-3">
+            <h1>
+                <i class="bi bi-cloud-lightning-rain-fill"></i> What the F-orecast?!?
+            </h1>
         </header>
-        <!-- city searchbar -->
-        <div class="container">
-            <div class="row">
-                <div>
-                    <p>
+
+        <!-- main page -->
+        <main class="row p-3 p-md-5">
+            <!-- search sidebar -->
+            <div class="col-12 col-md-3">
+                <!-- new city search -->
+                <div class="card bg-color-light">
+                    <h3 class="card-header bg-secondary text-light">
                         City Search
-                    </p>
-                    <div class="input-group">
-                        <input type="text" class="form-control" aria-label="Enter city name" placeholder="City, State" id="city-input">
-                        <div class="input-group-append">
-                            <button id="search-btn" type="button">
-                                <!-- TODO: add search image to button -->
-                            </button>
-                        </div>
+                    </h3>
+                    <div class="input-group m-4" id="city-search-form">
+                        <input type="text" class="form-control col-9 mr-2" aria-label="Enter city name" placeholder="City, State" id="city-input">
+                        <button class="btn btn-info mb-3" id="search-btn" type="button">
+                            <i class="bi bi-search"></i>
+                        </button>
                     </div>
+                </div>
+                <!-- recent city search list -->
+                <div class="card mt-4" id="recent-searches">
+                    <h3 class="card-header bg-secondary text-light">
+                        Recent Searches
+                    </h3>
+                    <button class="btn btn-info mb-3" type="button" id="clear-history">
+                        Clear History
+                    </button>
                 </div>
             </div>
 
-
-        <!-- TODO: add forecast section -->
-        <!-- TODO: add 5 day forecast sections -->
+            <!-- current forecast section -->
+            <div class="col-12 col-md-9 city-forecast hide">
+                <!-- current forecast -->
+                <div class="card mt-4 mt-md-0">
+                    <h2 class="card-header bg-secondary text-light">
+                        Today's Forecast
+                    </h2>
+                    <div class="container">
+                        <div class="row">
+                            <h3 class="ml-2">
+                                <span id="city-name" class="city-name align-middle"></span>
+                                <img class="weather-pic" id="weather-pic" src="placeholder">
+                            </h3>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <p class="pl-3">Temperature <span id="current-temp"></span> &deg;</p>
+                                <p class="pl-3">Feels Like <span id="feels-like"></span> &deg;</p>
+                                <p class="pl-3">High <span id="current-high"></span> &deg;</p>
+                                <p class="pl-3">Low <span id="current-low"></span> &deg;</p>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <p class="pl-3"><span id="current-condition"></span></p>
+                                <p class="pl-3">Humidity <span id="current-humidity"></span> %</p>
+                                <p class="pl-3">Wind <span id="current-wind"></span> mph</p>
+                                <p class="pl-3">UV Index <span id="current-uv"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- TODO: add 5 day forecast sections -->
+                
+            </div>
         </div>
         
-        <!-- TODO: link javascript -->
+        </main>
+        <!-- javascript -->
+        <script src="./assets/js/script.js"></script>
     </body>
 
 </html>
