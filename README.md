@@ -1,10 +1,10 @@
 # Weather Dashboard
 
-Link to deployed page:
+Link to deployed page: https://jl118.github.io/weather-dashboard/
 
 ## Overview and Functionality
 
-This is an easy-to-use weather dashboard that allows the user to search for the forecast by city. 
+This is an easy-to-use weather dashboard that allows the user to search for the forecast by city utilizing the OpenWeatherMap API. 
 
 The current weather is shown in the largest section of the page, with an icon that changes with the conditions, along with the date and time. Below is the temperature, real-feel, high, and low temperatures. Next to that is the current condition, humidity, wind speed, and UV index that changes color to indicate the severity of the UV rays. 
 
