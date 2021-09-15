@@ -1,5 +1,4 @@
 // declared variables
-var time = moment();
 var cityInput = document.querySelector('#city-input');
 var searchBtn = document.querySelector('#search-btn');
 var cityNameEl = document.querySelector('#city-name');
@@ -7,7 +6,7 @@ var cityArray = [];
 var apiKey = '5f3d8e61f6ecd062e3ea0bfd4154ce1e';
 
 
-var formHandler = function(e) {
+var formHandler = function(event) {
     var selectedCity = cityInput
         .value
         .trim()
@@ -25,18 +24,18 @@ var formHandler = function(e) {
 };
 
 var getLocation = function(city) {
-    var weatherApi = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
+    var weatherApi = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
 
     fetch(weatherApi).then(function(response) {
-        if(response.ok) {
+        if (response.ok) {
             response.json().then(function(data) {
                 var lon = data.coord['lon'];
                 var lat = data.coord['lat'];
                 getForecast(city, lon, lat);
 
                 // save the city to search list
-                if (document.querySelector('.search-list')) {
-                    document.querySelector('.search-list').remove();
+                if (document.querySelector('.city-list')) {
+                    document.querySelector('.city-list').remove();
                 };
 
                 saveSearch(city);
@@ -82,8 +81,8 @@ var currentForecast = function(forecast) {
 
     // sets weather icon based on forecast
     var weatherIconEl = document.querySelector('#today-icon');
-    var currentICon = forecast.current.weather[0].icon;
-    weatherIconEl.setAttribute('src', `http://openweathermap.org/img/wn/${currentIcon}.png`);
+    var currentIcon = forecast.current.weather[0].icon;
+    weatherIconEl.setAttribute('src', `https://openweathermap.org/img/wn/${currentIcon}.png`);
     weatherIconEl.setAttribute('alt', forecast.current.weather[0].main);
 
     // display temperatures
@@ -129,10 +128,84 @@ var currentForecast = function(forecast) {
 
 }
 
-// TODO: five day forecast function
+// five day forecast function
+var fiveDayForecast = function(forecast) {
+    for (var i = 1; i < 6; i++) {
+        var pDate = document.querySelector('#date-' + i);
+        pDate.textContent = moment().add(i, 'days').format('MMM Do YYYY');
 
-// TODO: save city searches to local storage
+        // set 5 day forecast icons
+        var iconImg = document.querySelector('#icon-' + i);
+        var futureIcon = forecast.daily[i].weather[0].icon;
+        iconImg.setAttribute('src', `https://openweathermap.org/img/wn/${futureIcon}.png`);
+        iconImg.setAttribute('alt', forecast.daily[i].weather[0].main);
 
-// TODO: load cities from local storage to search list
+        // temperatures
+        displayTemp('#temp-' + i, forecast.daily[i].temp.day);
+        displayTemp('#high-' + i, forecast.daily[i].temp.max);
+        displayTemp('#low-' + i, forecast.daily[i].temp.min);
 
-// TODO: add event listener to saved cities so if you click on them it searches them again
+        // humidity
+        var pHumidity = document.querySelector('#humidity-' + i);
+        pHumidity.textContent = forecast.daily[i].humidity;
+
+        // wind speed
+        var pWind = document.querySelector('#wind-' + i);
+        pWind.textContent = forecast.daily[i].wind_speed;
+
+    };
+};
+
+// save city searches to local storage
+var saveSearch = function(city) {
+
+    // prevents duplicate city from being saved and moves it to end of array
+    for (var i = 0; i < cityArray.length; i++) {
+        if (city === cityArray[i]) {
+            cityArray.splice(i, 1);
+        }
+    }
+
+    cityArray.push(city);
+    localStorage.setItem('cities', JSON.stringify(cityArray));
+};
+
+// loads cities from local storage
+var loadSearches = function() {
+    cityArray = JSON.parse(localStorage.getItem('cities'));
+
+    if (!cityArray) {
+        cityArray = [];
+        return false;
+    } else if (cityArray.length > 5) {
+        // saves only the five most recent cities
+        cityArray.shift();
+    }
+
+    var recentCities = document.querySelector('#recent-searches');
+    var cityListUl = document.createElement('ul');
+    cityListUl.className = 'list-group list-group-flush city-list';
+    recentCities.appendChild(cityListUl);
+
+    for (var i = 0; i < cityArray.length; i++) {
+        var cityListItem = document.createElement('button');
+        cityListItem.setAttribute('type', 'button');
+        cityListItem.className = 'list-group-item bg-transparent text-white font-weight-bold';
+        cityListItem.setAttribute('value', cityArray[i]);
+        cityListItem.textContent = cityArray[i];
+        cityListUl.prepend(cityListItem);
+    }
+
+    var cityList = document.querySelector('.city-list');
+    cityList.addEventListener('click', selectRecent)
+}
+
+// adds functionality to saved cities so if you click on them it searches them again
+var selectRecent = function(e) {
+    var clickedCityEl = e.target.getAttribute('value');
+
+    getLocation(clickedCityEl);
+};
+
+loadSearches();
+searchBtn.addEventListener('click', formHandler);
